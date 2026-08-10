@@ -9,6 +9,15 @@ backend/firebase-service-account.json
 frontend/node_modules/
 frontend/dist/
 frontend/.env
+frontend/.env.example
 
 # OS
 .DS_Store
+
+# node modules
+node_modules
+frontend/node_modules
+
+
+frontend/.agents
+frontend/.claude
