@@ -1,14 +1,3 @@
-"""
-Hospital Management System - Backend API
-
-Framework: FastAPI (Python)
-Database / Auth: Firebase (Firestore + Firebase Authentication)
-
-Run locally:
-    uvicorn app.main:app --reload --port 8000
-
-Interactive API docs: http://localhost:8000/docs
-"""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -21,27 +10,27 @@ from app.routers import (
     doctors,
     departments,
     appointments,
+    admissions,
     medical_records,
     lab,
     pharmacy,
     billing,
     staff,
-    admissions,
     reports,
 )
 
+# Initialize Firebase Admin SDK once, at startup
 init_firebase()
 
-app = FastAPI(
-    title="Hospital Management System API",
-    description="Backend for the HMS: patients, doctors, appointments, EMR, "
-    "laboratory, pharmacy, billing, staff and reports.",
-    version="1.0.0",
-)
+app = FastAPI(title="MediCore Hospital Management System")
+
+# CORS — must be added BEFORE routers are included, and must read
+# from settings.cors_origins (set via CORS_ORIGINS env var on Render)
+origins = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origin_list,
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -52,24 +41,15 @@ app.include_router(patients.router)
 app.include_router(doctors.router)
 app.include_router(departments.router)
 app.include_router(appointments.router)
+app.include_router(admissions.router)
 app.include_router(medical_records.router)
 app.include_router(lab.router)
 app.include_router(pharmacy.router)
-app.include_router(pharmacy.prescriptions_router)
 app.include_router(billing.router)
-app.include_router(billing.payments_router)
 app.include_router(staff.router)
-app.include_router(staff.attendance_router)
-app.include_router(staff.leave_router)
-app.include_router(admissions.router)
 app.include_router(reports.router)
 
 
 @app.get("/")
 def root():
-    return {"status": "ok", "service": "Hospital Management System API"}
-
-
-@app.get("/health")
-def health():
-    return {"status": "healthy"}
+    return {"status": "ok", "service": "MediCore HMS API"}

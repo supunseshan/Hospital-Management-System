@@ -20,12 +20,26 @@ import Staff from "./pages/Staff";
 import Reports from "./pages/Reports";
 import Users from "./pages/Users";
 
+function NoAccess() {
+  return (
+    <div className="min-h-screen flex items-center justify-center p-8 text-center">
+      <div>
+        <h1 className="text-xl font-semibold mb-2">No profile found</h1>
+        <p className="text-slate-600">
+          Ask an administrator to set up your account, or check the browser console for errors.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/no-access" element={<NoAccess />} />
 
           <Route
             path="/"
